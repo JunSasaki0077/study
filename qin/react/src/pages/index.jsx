@@ -1,20 +1,8 @@
+import Posts from "@/components/Posts";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-
-  const getPosts = useCallback(async () => {
-    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-    const json = await res.json();
-    setPosts(json);
-  }, []);
-
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
-
-  console.log(posts);
   return (
     <div>
       <Head>
@@ -23,15 +11,9 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {posts.length > 0 ? (
-        <ol>
-          {posts.map((post) => {
-            return <li key={post.id}>{post.title}</li>;
-          })}
-        </ol>
-      ) : null}
+
+      <Posts />
     </div>
   );
 };
-
 export default Home;

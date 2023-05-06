@@ -1,41 +1,35 @@
 import { useCallback, useEffect, useState } from "react";
-import Error from "next/error";
 
-export const Posts = () => {
-  // const [posts, setPosts] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-  const [state, setState] = useState({
-    data: [],
-    loading: true,
-    error: null,
-  });
+const Posts = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const getPosts = useCallback(async () => {
     try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      const res = await fetch("https://jsonplaceholder.typicode.com/postsaa");
       if (!res.ok) {
-        throw new Error("えらーが発生したため、データの取得に失敗しました");
+        throw new Error("エラーが発生したため、データの取得に失敗しました。");
       }
       const json = await res.json();
-      // setPosts(json);
+      setPosts(json);
     } catch (error) {
-      // setError(error);
+      setError(error);
     }
-    // setLoading(false);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
     getPosts();
   }, [getPosts]);
 
-  if (state.loading) {
+  if (loading) {
     return <div>ローディング中です</div>;
   }
-  if (state.error) {
+  if (error) {
     return <div>{error.message}</div>;
   }
-  if (state.data.length === 0) {
+  if (posts.length === 0) {
     return <div>データはからです</div>;
   }
 
@@ -47,3 +41,5 @@ export const Posts = () => {
     </ol>
   );
 };
+
+export default Posts;
