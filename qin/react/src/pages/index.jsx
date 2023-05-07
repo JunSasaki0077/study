@@ -1,6 +1,5 @@
 import Posts from "@/components/Posts";
 import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
 
 const Home = () => {
   return (
