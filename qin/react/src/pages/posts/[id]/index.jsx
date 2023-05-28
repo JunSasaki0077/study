@@ -7,7 +7,6 @@ import React from "react";
 const PostId = () => {
   return (
     <div>
-      <header>header</header>
       <Post />
     </div>
   );

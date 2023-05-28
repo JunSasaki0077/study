@@ -37,7 +37,7 @@ const Posts = () => {
       {data.map((post) => {
         return (
           <li key={post.id}>
-            <Link href={`/post/${post.id}`}>
+            <Link href={`/posts/${post.id}`}>
               <h2>{post.title}</h2>
             </Link>
           </li>
