@@ -1,15 +1,6 @@
+import { fetcher } from "@/utils/fetcher";
+import Link from "next/link";
 import useSWR from "swr";
-
-const fetcher = async (url) => {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("エラーが発生したため、データの取得に失敗しました。");
-  }
-
-  const json = await response.json();
-  return json;
-};
 
 const usePosts = () => {
   {
@@ -44,7 +35,13 @@ const Posts = () => {
   return (
     <ol>
       {data.map((post) => {
-        return <li key={post.id}>{post.title}</li>;
+        return (
+          <li key={post.id}>
+            <Link href={`/post/${post.id}`}>
+              <h2>{post.title}</h2>
+            </Link>
+          </li>
+        );
       })}
     </ol>
   );
