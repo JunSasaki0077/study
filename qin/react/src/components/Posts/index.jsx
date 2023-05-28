@@ -17,7 +17,7 @@ const usePosts = () => {
   }
 };
 
-const Posts = () => {
+export const Posts = () => {
   const { data, error, isLoading, isEmpty } = usePosts();
 
   console.log({ data, error });
@@ -38,7 +38,7 @@ const Posts = () => {
         return (
           <li key={post.id}>
             <Link href={`/posts/${post.id}`}>
-              <h2>{post.title}</h2>
+              <p>{post.title}</p>
             </Link>
           </li>
         );
@@ -46,5 +46,3 @@ const Posts = () => {
     </ol>
   );
 };
-
-export default Posts;

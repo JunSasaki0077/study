@@ -1,7 +1,8 @@
-import Posts from "@/components/Posts";
+import { Posts as PostsComponent } from "@/components/Posts";
+import { Header } from "@/components/header";
 import Head from "next/head";
 
-const Home = () => {
+const Posts = () => {
   return (
     <div>
       <Head>
@@ -10,9 +11,9 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Posts />
+      <Header />
+      <PostsComponent />
     </div>
   );
 };
-export default Home;
+export default Posts;

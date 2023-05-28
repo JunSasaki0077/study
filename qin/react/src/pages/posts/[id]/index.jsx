@@ -1,10 +1,8 @@
 import Post from "@/components/Post";
-import { usePost } from "@/hooks/usePost";
-import Head from "next/head";
-import { useRouter } from "next/router";
+
 import React from "react";
 
-const PostId = () => {
+const PostsId = () => {
   return (
     <div>
       <Post />
@@ -12,4 +10,4 @@ const PostId = () => {
   );
 };
 
-export default PostId;
+export default PostsId;

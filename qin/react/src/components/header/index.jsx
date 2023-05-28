@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 const NAV_ITEMS = [
+  { herf: "/", label: "Index" },
   { herf: "/posts", label: "Posts" },
-  { herf: "/About", label: "About" },
+  { herf: "/users", label: "Users" },
+  { herf: "/comment", label: "Comments" },
 ];
 
 export const Header = () => {
