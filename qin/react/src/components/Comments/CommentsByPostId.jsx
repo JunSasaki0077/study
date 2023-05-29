@@ -1,8 +1,8 @@
-import { useComments } from "@/hooks/useFetchArray";
+import { useCommentsByPostsId } from "@/hooks/useFetchArray";
 import Link from "next/link";
 
-export const Comments = () => {
-  const { data, error, isLoading, isEmpty } = useComments();
+export const CommentsByPostId = (props) => {
+  const { data, error, isLoading, isEmpty } = useCommentsByPostsId(props.id);
 
   if (isLoading) {
     return <div>ローディング中です。</div>;
@@ -20,7 +20,7 @@ export const Comments = () => {
       {data.map((comment) => (
         <li key={comment.id}>
           <Link href={`/comments/${comment.id}`}>
-            <p>{comment.name}</p>
+            <p>{comment.body}</p>
           </Link>
         </li>
       ))}

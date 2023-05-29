@@ -1,21 +1,5 @@
-import { fetcher } from "@/utils/fetcher";
+import { useComments, usePosts } from "@/hooks/useFetchArray";
 import Link from "next/link";
-import useSWR from "swr";
-
-const usePosts = () => {
-  {
-    const { data, error } = useSWR(
-      "https://jsonplaceholder.typicode.com/posts",
-      fetcher
-    );
-    return {
-      data,
-      error,
-      isLoading: !error && !data,
-      isEmpty: data && data.length === 0,
-    };
-  }
-};
 
 export const Posts = () => {
   const { data, error, isLoading, isEmpty } = usePosts();

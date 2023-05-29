@@ -1,19 +1,5 @@
-import { fetcher } from "@/utils/fetcher";
-import useSWR from "swr";
+import { useUsers } from "@/hooks/useFetchArray";
 import Link from "next/link";
-
-const useUsers = () => {
-  const { data, error } = useSWR(
-    "https://jsonplaceholder.typicode.com/users",
-    fetcher
-  );
-  return {
-    data,
-    error,
-    isLoading: !error && !data,
-    isEmpty: data && data.length === 0,
-  };
-};
 
 export const Users = () => {
   const { data, error, isLoading, isEmpty } = useUsers();
