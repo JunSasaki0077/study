@@ -4,7 +4,7 @@ const NAV_ITEMS = [
   { herf: "/", label: "Index" },
   { herf: "/posts", label: "Posts" },
   { herf: "/users", label: "Users" },
-  { herf: "/comment", label: "Comments" },
+  { herf: "/comments", label: "Comments" },
 ];
 
 export const Header = () => {
