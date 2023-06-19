@@ -1,8 +1,7 @@
 import { useComment } from "@/hooks/useComment";
-import Head from "next/head";
 import PostByCommentId from "../Post/PostByCommentId";
 
-export const Comment = (props) => {
+export const Comment = () => {
   const { data, error, isLoading } = useComment();
 
   if (isLoading) {
@@ -14,15 +13,14 @@ export const Comment = (props) => {
 
   return (
     <div>
-      <Head>
-        <title>{data.title}</title>
-      </Head>
-      <h1>{data.title}</h1>
-      <p>{data.email}</p>
-      <p>{data.body}</p>
-
-      <h2>元の記事</h2>
-      <PostByCommentId id={data.postId} />
+      <div className="text-lg">
+        {data.name} ({data.email})
+      </div>
+      <h1 className="text-3xl font-bold">{data.body}</h1>
+      <h2 className="text-lg font-bold mt-10">元の記事</h2>
+      <div className="mt-2">
+        <PostByCommentId id={data.postId} />
+      </div>
     </div>
   );
 };

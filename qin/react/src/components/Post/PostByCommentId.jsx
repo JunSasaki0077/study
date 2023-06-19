@@ -11,6 +11,10 @@ const PostByCommentId = (props) => {
     return <div>{error.message}</div>;
   }
 
-  return <Link href={`/posts/${data.id}`}>{data?.title}</Link>;
+  return (
+    <Link href={`/posts/${data.id}`} className="text-lg hover:text-blue-500">
+      {data?.title}
+    </Link>
+  );
 };
 export default PostByCommentId;
