@@ -1,8 +1,7 @@
 import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
 
 const useFetchArray = (url) => {
-  const { data, error } = useSWR(url, fetcher);
+  const { data, error } = useSWR(url);
   return {
     data,
     error,

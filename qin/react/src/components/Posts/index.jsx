@@ -1,4 +1,4 @@
-import { useComments, usePosts } from "@/hooks/useFetchArray";
+import { usePosts } from "@/hooks/useFetchArray";
 import Link from "next/link";
 
 export const Posts = () => {
