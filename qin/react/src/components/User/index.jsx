@@ -2,7 +2,7 @@ import { useUser } from "@/hooks/useUser";
 import Head from "next/head";
 import { PostsByUserId } from "../Posts/PostsByUserId";
 
-const User = () => {
+const User = (props) => {
   const { data, error, isLoading } = useUser();
 
   if (isLoading) {

@@ -18,7 +18,8 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const UserId = (props) => {
-  const { fallback } = props;
+  const { fallback } = props;ikasas0723
+  
   return (
     <SWRConfig value={{ fallback }}>
       <Header />
