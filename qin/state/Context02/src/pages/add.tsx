@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import { ComponentProps, useContext } from "react";
+import { ComponentProps, Dispatch, SetStateAction } from "react";
+import { Todo } from "src/types";
 
-import { TodoContext } from "./_app";
+type Props = {
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
+};
 
-const Add: NextPage = () => {
-  const { setTodos } = useContext(TodoContext);
-
+const Add: NextPage<Props> = ({ setTodos }) => {
   const handleSubmit: ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
     const text = e.currentTarget.text.value;

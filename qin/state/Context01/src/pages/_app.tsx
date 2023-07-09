@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
 
 import { Layout } from "src/components/Layout";
 import { Todo } from "src/types";
@@ -17,31 +17,24 @@ const TODOS: Todo[] = [
   },
 ];
 
-export const ThemeContext = createContext("light");
-export const LangContext = createContext("ja");
+export const TodoContext = createContext<{
+  todos: Todo[];
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
+}>({
+  todos: TODOS,
+  setTodos: () => {
+    throw Error("No default value");
+  },
+});
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [todos, setTodos] = useState<Todo[]>(TODOS);
-  const [theme, setTheme] = useState("light");
-  const [lang, setLang] = useState("ja");
 
   return (
-    <>
-      <ThemeContext.Provider value={theme}>
-        <LangContext.Provider value={lang}>
-          <Layout todoCount={todos.length}>
-            <button
-              onClick={() => {
-                setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-                setLang((prev) => (prev === "ja" ? "en" : "ja"));
-              }}
-            >
-              テーマ切り替え
-            </button>
-            <Component {...pageProps} todos={todos} setTodos={setTodos} />
-          </Layout>
-        </LangContext.Provider>
-      </ThemeContext.Provider>
-    </>
+    <TodoContext.Provider value={{ todos, setTodos }}>
+      <Layout>
+        <Component {...pageProps} todos={todos} setTodos={setTodos} />
+      </Layout>
+    </TodoContext.Provider>
   );
 }
