@@ -11,7 +11,7 @@ const Index = () => {
       <Header />
 
       <h1>Nextjsで学ぶReact講座</h1>
-      <p>JSONPlaceholdeのAPIを叩いてみるよ！</p>
+      <p>JSONPlaceholdeのAPIを叩いてみるよ!</p>
     </div>
   );
 };

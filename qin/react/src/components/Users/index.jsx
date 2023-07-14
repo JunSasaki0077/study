@@ -1,7 +1,7 @@
 import { useUsers } from "@/hooks/useFetchArray";
 import Link from "next/link";
 
-export const Users = () => {
+export const UsersComponent = () => {
   const { data, error, isLoading, isEmpty } = useUsers();
 
   if (isLoading) {
