@@ -5,7 +5,6 @@ export const getServerSideProps = async () => {
   const COMMENTS_API_URL = `https://jsonplaceholder.typicode.com/comments`;
   const comments = await fetch(COMMENTS_API_URL);
   const commentsData = await comments.json();
-  await sleep(2000);
 
   return {
     props: {
@@ -36,7 +35,7 @@ export const Comments = (props) => {
     <ul className="space-y-2">
       {data.map((comment) => (
         <li key={comment.id} className="border-b pb-2">
-          <Link href={`/comments/${comment.id}`}>
+          <Link href={`/comments/${comment.id}`} prefetch={false}>
             <p className="hover:text-blue-500">{comment.body}</p>
           </Link>
         </li>
