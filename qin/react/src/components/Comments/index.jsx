@@ -1,7 +1,24 @@
 import { useComments } from "@/hooks/useFetchArray";
 import Link from "next/link";
 
-export const Comments = () => {
+export const getServerSideProps = async () => {
+  const COMMENTS_API_URL = `https://jsonplaceholder.typicode.com/comments`;
+  const comments = await fetch(COMMENTS_API_URL);
+  const commentsData = await comments.json();
+  await sleep(2000);
+
+  return {
+    props: {
+      fallback: {
+        [COMMENTS_API_URL]: commentsData,
+      },
+    },
+  };
+};
+
+export const Comments = (props) => {
+  const { fallbback } = props;
+
   const { data, error, isLoading, isEmpty } = useComments();
 
   if (isLoading) {

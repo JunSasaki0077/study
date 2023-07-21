@@ -4,7 +4,9 @@ import { SWRConfig } from "swr";
 
 const fetcher = async (...args) => {
   const res = await fetch(...args);
+
   const json = await res.json();
+
   return json;
 };
 
