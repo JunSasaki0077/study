@@ -1,7 +1,16 @@
 import React from "react";
 
-const page = () => {
-  return <div className="text-red-500">ダッシュボード</div>;
-};
+export default async function Dashboards() {
+  const data = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+  const json = await data.json();
 
-export default page;
+  throw new Error();
+  return (
+    <main>
+      <div>ダッシュボード</div>
+      <div>{json.title}</div>
+    </main>
+  );
+}
+
+const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec));
