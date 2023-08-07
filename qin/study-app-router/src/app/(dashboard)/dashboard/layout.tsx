@@ -1,6 +1,14 @@
 import Link from "next/link";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  chart,
+  pv,
+}: {
+  children: React.ReactNode;
+  chart: React.ReactNode;
+  pv: React.ReactNode;
+}) {
   return (
     <div className="flex">
       <header className="bg-blue-200">
@@ -12,7 +20,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Link>
         </nav>
       </header>
-      <div className="p-10">{children}</div>
+
+      <div className="flex items-start  p-10">
+        <div className="bg-purple-100 p-10">{children}</div>
+        <div className="bg-orange-100 p-10">{chart}</div>
+        <div className="bg-pink-100 p-10">{pv}</div>
+      </div>
     </div>
   );
 }

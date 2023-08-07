@@ -4,7 +4,6 @@ export default async function Dashboards() {
   const data = await fetch("https://jsonplaceholder.typicode.com/todos/1");
   const json = await data.json();
 
-  throw new Error();
   return (
     <main>
       <div>ダッシュボード</div>
