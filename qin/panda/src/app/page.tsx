@@ -1,5 +1,18 @@
 import { css } from "../../styled-system/css";
 
 export default function Home() {
-  return <div className={css({ fontSize: "2xl", fontWeight: "bold" })}>Hello 🐼!</div>;
+  return (
+    <button
+      className={css({
+        "& span": { color: "red.400" },
+        color: { _hover: { _focus: "red" }, base: "blue" },
+        fontSize: { base: "3xl", lg: "8xl" },
+        fontWeight: { mdToXl: "bold" },
+        hideFrom: "md",
+      })}
+    >
+      Hello 🐼!
+      <span>hogs</span>
+    </button>
+  );
 }
