@@ -1,18 +1,28 @@
-import { css } from "../../styled-system/css";
+import { circle, container, hstack } from "../../styled-system/patterns";
 
 export default function Home() {
   return (
-    <button
-      className={css({
-        "& span": { color: "red.400" },
-        color: { _hover: { _focus: "red" }, base: "blue" },
-        fontSize: { base: "3xl", lg: "8xl" },
-        fontWeight: { mdToXl: "bold" },
-        hideFrom: "md",
-      })}
-    >
-      Hello 🐼!
-      <span>hogs</span>
-    </button>
+    <div>
+      <header
+        className={container({
+          py: "4",
+        })}
+      >
+        <div className={hstack({ justify: "space-between" })}>
+          <h1>dpop</h1>
+          <div
+            className={circle({
+              overflow: "hidden",
+              size: "10",
+            })}
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_So9gqwUmYFH9tiq7kN7R0cZK4EUcehfv9CfPHLcu5A&s"
+              alt=""
+            />
+          </div>
+        </div>
+      </header>
+    </div>
   );
 }
