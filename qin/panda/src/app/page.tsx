@@ -1,15 +1,14 @@
+import { styled } from "../../styled-system/jsx";
 import { circle, container, hstack } from "../../styled-system/patterns";
 
 export default function Home() {
   return (
     <div>
-      <header
-        className={container({
-          py: "4",
-        })}
-      >
+      <styled.header className={container()} py="4">
         <div className={hstack({ justify: "space-between" })}>
-          <h1>dpop</h1>
+          <styled.h1 fontWeight="bold" fontSize="2xl" _hover={{bg:red.400}}>
+            dpop
+          </styled.h1>
           <div
             className={circle({
               overflow: "hidden",
@@ -22,7 +21,7 @@ export default function Home() {
             />
           </div>
         </div>
-      </header>
+      </styled.header>
     </div>
   );
 }
