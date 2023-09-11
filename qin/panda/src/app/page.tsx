@@ -1,12 +1,29 @@
+import { cva } from "../../styled-system/css";
 import { styled } from "../../styled-system/jsx";
 import { circle, container, hstack } from "../../styled-system/patterns";
+
+const button = cva({
+  base: {
+    display: "flex",
+  },
+  variants: {
+    size: {
+      lg: { fontSize: "24px", padding: "8" },
+      sm: { fontSize: "12px", padding: "4" },
+    },
+    visual: {
+      outline: { borderColor: "red.200", borderWidth: "1pxv " },
+      solid: { bg: "red.400", color: "white" },
+    },
+  },
+});
 
 export default function Home() {
   return (
     <div>
       <styled.header className={container()} py="4">
         <div className={hstack({ justify: "space-between" })}>
-          <styled.h1 fontWeight="bold" fontSize="2xl" _hover={{bg:red.400}}>
+          <styled.h1 fontWeight="bold" fontSize="2xl" _hover={{ bg: "red.400" }}>
             dpop
           </styled.h1>
           <div
@@ -22,6 +39,7 @@ export default function Home() {
           </div>
         </div>
       </styled.header>
+      <button className={button({ size: "lg", visual: "outline" })}></button>
     </div>
   );
 }
