@@ -2,9 +2,13 @@ import { cva } from "../../styled-system/css";
 import { styled } from "../../styled-system/jsx";
 import { circle, container, hstack } from "../../styled-system/patterns";
 
-const button = cva({
+const buttonStyle = cva({
   base: {
     display: "flex",
+  },
+  defaultVariants: {
+    size: "sm",
+    visual: "solid",
   },
   variants: {
     size: {
@@ -17,6 +21,8 @@ const button = cva({
     },
   },
 });
+
+const Button = styled("button", buttonStyle);
 
 export default function Home() {
   return (
@@ -39,7 +45,7 @@ export default function Home() {
           </div>
         </div>
       </styled.header>
-      <button className={button({ size: "lg", visual: "outline" })}></button>
+      <Button size="lg" visual="outline"></Button>
     </div>
   );
 }
