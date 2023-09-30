@@ -1,18 +1,15 @@
 import { useAtom } from "jotai";
 import type { NextPage } from "next";
 import { ComponentProps } from "react";
-import { todosAtom } from "src/state/todo";
+import { addTodoAtom } from "src/state/todo";
 
 const Add: NextPage = () => {
-  const [_, setTodos] = useAtom(todosAtom);
+  const [_, addTodo] = useAtom(addTodoAtom);
 
   const handleSubmit: ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
     const text = e.currentTarget.text.value;
-    setTodos((prevTodos) => {
-      const newTodo = { id: prevTodos.length + 1, text, isDone: false };
-      return [...prevTodos, newTodo];
-    });
+    addTodo({ text });
     e.currentTarget.reset();
   };
 
