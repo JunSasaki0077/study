@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: "plugin:react/recommended",
   overrides: [
@@ -25,5 +26,6 @@ module.exports = {
     semi: "error",
     quotes: "error",
     "react/prop-types": "off",
+    "no-undef": "error",
   },
 };

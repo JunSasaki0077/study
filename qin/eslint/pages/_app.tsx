@@ -3,5 +3,6 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
+  document.body.style.color === "red";
   return <Component {...pageProps} />;
 }
