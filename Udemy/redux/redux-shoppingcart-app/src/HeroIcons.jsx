@@ -42,7 +42,7 @@ export const MinusIcon = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      classNameName="w-6 h-6"
+      className="w-6 h-6"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
     </svg>
