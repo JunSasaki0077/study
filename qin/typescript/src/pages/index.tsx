@@ -1,15 +1,7 @@
-let foo = {} as { bar: number };
+import { NextPage } from "next";
 
-foo.bar = 1;
+const foo: null = null;
 
-function double(x: number): number | undefined {
-  if (x > 0) {
-    return;
-  }
-
-  return x * 2;
-}
-
-export default function Home() {
+export const Home: NextPage = () => {
   return <div>test</div>;
-}
+};
