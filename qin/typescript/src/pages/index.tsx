@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 
-const foo: null = null;
+const foo: "foo" = "foo";
+let bar = foo;
 
 export const Home: NextPage = () => {
   return <div>test</div>;
