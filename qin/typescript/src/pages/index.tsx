@@ -1,10 +1,15 @@
 import { NextPage } from "next";
 
-type Foo = number;
+type Animals = "dog" | "cat";
 
-type Bar = string;
+type Foo = {
+  [key in Animals]: number;
+};
 
-type FooBar = Foo | Bar;
+const foo: Foo = {
+  dog: 2,
+  cat: 2,
+};
 
 const Home: NextPage = () => {
   return <div>test</div>;
