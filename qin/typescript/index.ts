@@ -1,37 +1,43 @@
-type UserA = { name: string; lang: "ja" };
-type UserB = { name: string; lang: "en" };
-
-const isUserA = (user: UserA | UserB): user is UserA => {
-  return user.lang === "ja";
-};
-const isUserB = (user: UserA | UserB): user is UserB => {
-  return user.lang === "en";
+type User<T> = {
+  name: string;
+  state: T;
 };
 
-export const foo = (value: any) => {
-  if (isUserA(value)) {
-    return value;
-  }
-  if (isUserB(value)) {
-    return value;
-  }
-  return value;
+type Japanese = User<"東京都" | "大阪府">;
+type American = User<"CA" | "NY">;
+
+const user1: Japanese = {
+  name: "田中",
+  state: "東京都",
 };
 
-//非同期の型定義
-export const bar = async () => {
-  const res = await fetch("");
-  const json = await res.json();
-  if (isUserA(json)) {
-    return json.lang;
-  }
+const user2: American = {
+  name: "Johnny",
+  state: "CA",
 };
 
-//filter関数の型定義
-const users: (UserA | UserB)[] = [
-  { name: "たなか", lang: "ja" },
-  { name: "やまだ", lang: "ja" },
-  { name: "ジョニー", lang: "en" },
-];
+//ジェネリクスの初期値
 
-const japanese = users.filter(isUserA);
+export type Foo<T = string> = {
+  value: T;
+};
+
+const foo1: Foo = {
+  value: "",
+};
+
+const foo2: Foo<number> = {
+  value: 111,
+};
+
+export type Bar<T extends string | number = string> = {
+  value: T;
+};
+
+const bar1: Bar = {
+  value: "bat",
+};
+
+const bar2: Bar<number> = {
+  value: 123,
+};
