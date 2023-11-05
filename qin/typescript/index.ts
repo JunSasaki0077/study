@@ -1,10 +1,17 @@
-export const PATH = {
-  INDEX: "/",
-  LOGIN: "/login",
-  REGISTER: "/register",
-  PROFILE: "/profile",
-} as const;
+export type User = {
+  name: string;
+} & OptionalPersonalData;
 
-export function getFirstLetter(str: number) {
-  return (str as unknown as string).charAt(0);
-}
+type PersonalData = {
+  weight?: number;
+  height?: number;
+  realName?: string;
+};
+
+type OptionalPersonalData = {
+  [K in keyof PersonalData]?: PersonalData[K];
+};
+
+const user: User = {
+  name: "じゅん",
+};
