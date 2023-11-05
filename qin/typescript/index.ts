@@ -1,17 +1,21 @@
-export type User = {
-  name: string;
-} & OptionalPersonalData;
+type UserA = { name: string; lang: "ja" };
+type UserB = { name: string; lang: "en" };
+type UserC = { name: string; lang: "fr" };
 
-type PersonalData = {
-  weight?: number;
-  height?: number;
-  realName?: string;
-};
-
-type OptionalPersonalData = {
-  [K in keyof PersonalData]?: PersonalData[K];
-};
-
-const user: User = {
-  name: "じゅん",
+export const foo = (value: UserA | UserB | UserC) => {
+  switch (value.lang) {
+    case "ja": {
+      return value;
+    }
+    case "en": {
+      return value;
+    }
+    case "fr": {
+      return value;
+    }
+    default: {
+      throw Error("lang is node defined!");
+      return value;
+    }
+  }
 };
