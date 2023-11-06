@@ -1,43 +1,11 @@
-type User<T> = {
-  name: string;
-  state: T;
+const foo = <T extends string | number>(arg: T) => {
+  if (typeof arg === "string") {
+    return { value: arg.toLocaleLowerCase() };
+  }
+
+  return { value: arg.toFixed };
 };
 
-type Japanese = User<"東京都" | "大阪府">;
-type American = User<"CA" | "NY">;
-
-const user1: Japanese = {
-  name: "田中",
-  state: "東京都",
-};
-
-const user2: American = {
-  name: "Johnny",
-  state: "CA",
-};
-
-//ジェネリクスの初期値
-
-export type Foo<T = string> = {
-  value: T;
-};
-
-const foo1: Foo = {
-  value: "",
-};
-
-const foo2: Foo<number> = {
-  value: 111,
-};
-
-export type Bar<T extends string | number = string> = {
-  value: T;
-};
-
-const bar1: Bar = {
-  value: "bat",
-};
-
-const bar2: Bar<number> = {
-  value: 123,
-};
+// const foo1 = foo("");
+// const foo2 = foo(1);
+// const foo3 = foo([false]);
