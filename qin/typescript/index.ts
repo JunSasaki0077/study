@@ -1,23 +1,25 @@
-type Props = {
-  id: string;
+type User = {
   name: string;
-  age: number;
+  age: number | null;
+  country?: "UK" | "JA" | "US";
 };
 
-type Filter<T, U> = {
-  [K in keyof T]: T[K] extends U ? K : never;
-}[keyof T];
+// 読み取り専用の型指定
+type ReadonlyUser = Readonly<User>;
 
-type StringKeys = Filter<Props, string>;
-type NumberKeys = Filter<Props, number>;
-type BooleanKeys = Filter<Props, boolean>;
+// 指定した型をオプショナルにする。
+type PartialUser = Partial<User>;
 
-const foo = (id: string, age: number) => {
-  return 1;
+// 指定した方を全て必須にしたい
+type RequiredUser = Required<User>;
+
+//オブジェクトがあったときに必要なプロパティを指定して新しいオブジェクトを返す
+type PickUser = Pick<User, "name" | "country">;
+
+//いらないプロパティを指定して新しいオブジェクトを指定する
+type OmitUser = Omit<User, "age">;
+
+const user: OmitUser = {
+  name: "じゅん",
+  country: "JA",
 };
-
-type Return<T> = T extends (...args: [any, infer U, ...any[]]) => any
-  ? U
-  : never;
-
-type Foo = Return<typeof foo>;
