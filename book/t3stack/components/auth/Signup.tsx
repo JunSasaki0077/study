@@ -20,17 +20,26 @@ import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+
+// 入力データの検証ルールを定義
 const schema = z.object({
   name: z.string().min(2, { message: "2文字以上入力する必要があります" }),
   email: z.string().email({ message: "メールアドレスの形式ではありません" }),
   password: z.string().min(8, { message: "8文字以上入力する必要があります" }),
 });
+
+// 入力データの型を定義
 type InputType = z.infer<typeof schema>;
+
+// サインアップ
 const Signup = () => {
   const router = useRouter();
 
+  // フォームの状態
   const form = useForm<InputType>({
+    // 入力値の検証
     resolver: zodResolver(schema),
+    // 初期値
     defaultValues: {
       name: "",
       email: "",
@@ -38,6 +47,7 @@ const Signup = () => {
     },
   });
 
+  // Googleアカウントでサインアップ
   const handleGoogleSingup = async () => {
     try {
       const result = await signIn("google", { callbackUrl: "/" });
@@ -50,10 +60,12 @@ const Signup = () => {
     }
   };
 
+  // サインアップ
   const { mutate: singUp, isLoading } = trpc.auth.singUp.useMutation({
     onSuccess: () => {
       toast.success("アカウントを作成しました!");
 
+      // ログイン
       signIn("credentials", {
         email: form.getValues("email"),
         password: form.getValues("password"),
@@ -68,7 +80,9 @@ const Signup = () => {
     },
   });
 
+  // 送信
   const onSubmit: SubmitHandler<InputType> = (data) => {
+    // サインアップ
     singUp(data);
   };
 
