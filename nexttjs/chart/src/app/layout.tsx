@@ -6,6 +6,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const obj = {
+    a: true,
+    b: true,
+    "𐊧": true,
+  };
+
   return (
     <html lang="ja">
       <body>{children}</body>
