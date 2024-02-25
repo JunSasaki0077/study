@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { motion } from "framer-motion";
+import { Reorder, motion } from "framer-motion";
 
 function App() {
   type LogoListType = {
@@ -23,13 +23,19 @@ function App() {
     <>
       <div className="h-screen flex justify-center items-center flex-col">
         <div className="mb-[38px]">
-          <ul className="flex gap-[30px]">
+          <Reorder.Group
+            axis="x"
+            values={logoList}
+            onReorder={setLogoList}
+            className="flex gap-[30px]"
+          >
             {logoList.map((logo) => (
-              <li key={logo.id}>
+              <Reorder.Item key={logo.id} value={logo}>
                 <a href={logo.url} target="_blank" draggable="false">
                   <motion.img
                     src={logo.img}
                     alt={`${logo.id} logo`}
+                    draggable="false"
                     className="w-[80px] h-[80px]"
                     animate={
                       logo.id == "react"
@@ -48,9 +54,9 @@ function App() {
                     }
                   />
                 </a>
-              </li>
+              </Reorder.Item>
             ))}
-          </ul>
+          </Reorder.Group>
         </div>
         <h1 className="text-[50px] mb-[30px] font-bold flex gap-2">
           Vite + React
