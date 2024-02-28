@@ -1,6 +1,7 @@
 import { useState } from "react";
+
 import "./App.css";
-import { Reorder, motion } from "framer-motion";
+import { AnimatePresence, Reorder, animate, motion } from "framer-motion";
 
 function App() {
   type LogoListType = {
@@ -14,9 +15,11 @@ function App() {
     { id: "vite", url: "https://vitejs.dev", img: "/vite.svg" },
     { id: "react", url: "https://react.dev", img: "/react.svg" },
   ]);
+  const [isShow, setIsShow] = useState<boolean>(false);
 
   const handleClick = () => {
     setCount((count) => count + 1);
+    setIsShow(true);
   };
 
   return (
@@ -63,12 +66,25 @@ function App() {
         </h1>
         <div className="card text-center mb-[5px]">
           <div className="relative w-max mx-auto">
-            <button className="border border-black py-1 px-3 rounded mb-[30px]">
+            <motion.button
+              whileTap={{ scale: 1.2 }}
+              onClick={handleClick}
+              className="border border-black py-1 px-3 rounded mb-[30px]"
+            >
               count is {count}
-            </button>
-            <p className="absolute top-[-10px] right-[-30px] text-[20px] text-red-500">
-              +1
-            </p>
+            </motion.button>
+            <AnimatePresence>
+              {isShow && (
+                <p
+                  onAnimationEndCapture={() => setIsShow(false)}
+                  animate={{ opacity: [0, 1] }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute top-[-10px] right-[-30px] text-[20px] text-red-500"
+                >
+                  +1
+                </p>
+              )}
+            </AnimatePresence>
           </div>
         </div>
         <p className="text-[14px]">
