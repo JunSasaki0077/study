@@ -6,7 +6,7 @@ async function getBBSAllData() {
     cache: "no-store",
   });
 
-  const bbsAllData: BBSData = await response.json();
+  const bbsAllData: BBSData[] = await response.json();
 
   return bbsAllData;
 }
