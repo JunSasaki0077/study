@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Logo({
@@ -12,26 +13,19 @@ export default function Logo({
   size?: "lg";
 }) {
   return (
-    <Link href="/">
-      <div className={`${justifyContent} align-center flex`}>
-        {type === "iconAndText" && (
-          <h3
-            className={`${
-              colorTheme === "light" ? "text-white" : "text-gray-900"
-            } tracking-loose mb-0 pb-0 font-bold ${
-              size === "lg" ? "text-3xl" : "text-2xl"
-            }`}
-          >
-            FileMaker
-          </h3>
-        )}
-        <FolderOpenIcon
-          width={size === "lg" ? 40 : 30}
+    <div className={`${justifyContent}  flex items-center gap-2`}>
+      {type === "iconAndText" && (
+        <h3
           className={`${
-            colorTheme === "light" ? "text-white" : "text-blue-600"
-          } ml-2`}
-        />
-      </div>
-    </Link>
+            colorTheme === "light" ? "text-white" : "text-gray-900"
+          } tracking-loose mb-0 pb-0 font-bold ${
+            size === "lg" ? "text-3xl" : "text-2xl"
+          }`}
+        >
+          Sauna SNS
+        </h3>
+      )}
+      <Image width={30} height={60} src="/top-icon.jpg" alt="sauna" />
+    </div>
   );
 }

@@ -14,11 +14,8 @@ export default function Home() {
           </h1>
 
           <div className="mt-10 flex items-center gap-x-6">
-            <Button appearance="primary" size="md">
-              <Link href="/auth/sign-up">アカウント作成</Link>
-            </Button>
             <Link href="/auth/sign-in">
-              <Button appearance="secondary" size="md">
+              <Button appearance="primary" size="md">
                 ログイン
               </Button>
             </Link>
@@ -28,7 +25,7 @@ export default function Home() {
           <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
               <Image
-                src="/public/top.jpg"
+                src="/top.jpg"
                 alt="QuickSend editor"
                 className="w-[60rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
                 width={1000}
