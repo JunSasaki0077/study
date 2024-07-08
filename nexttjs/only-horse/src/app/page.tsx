@@ -1,7 +1,7 @@
+import AuthScreen from "@/components/home/auth-screen/AuthScreen";
+import HomeScreen from "@/components/home/home-screen/HomeScreen";
+
 export default function Home() {
-  return (
-    <main>
-      <h1>Hello world</h1>
-    </main>
-  );
+  const user = false;
+  return <main>{user ? <HomeScreen /> : <AuthScreen />}</main>;
 }
