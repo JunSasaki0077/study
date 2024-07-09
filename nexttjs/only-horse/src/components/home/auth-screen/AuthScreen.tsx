@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/ModeToggle";
 import HeroSection from "./HeroSection";
 
 const AuthScreen = () => {
