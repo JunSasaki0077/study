@@ -1,9 +1,10 @@
 import Image from "next/image";
+import AuthButtons from "./AuthButtons";
 
 const HeroSection = () => {
   return (
     <div className="flex h-screen w-full">
-      <div className="flex-1 flex overflow-hidden bg-[#00b0f0a6] relative justify-center items-center z-10">
+      <div className="flex-1 flex overflow-hidden bg-[#00b0f0a6] relative justify-center items-center z-10 bg-noise">
         <img
           src="/of-logo.svg"
           alt="OnlyHorse Logo"
@@ -29,9 +30,17 @@ const HeroSection = () => {
             NOT
             <span className="bg-red-500 px-2 font-bold text-white">OTHERS</span>
           </p>
+          <AuthButtons />
         </div>
       </div>
-      <div className="flex-1 ">right</div>
+      <div className="flex-1 relative overflow-hidden justify-center items-center hidden md:flex">
+        <Image
+          src={"/horse-1.png"}
+          alt="Horse"
+          fill
+          className="object-cover opacity-90 pointer-events-none select-none h-full"
+        />
+      </div>
     </div>
   );
 };
