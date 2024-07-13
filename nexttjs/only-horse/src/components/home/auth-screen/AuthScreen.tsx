@@ -1,7 +1,9 @@
 import { ModeToggle } from "@/components/ModeToggle";
 import HeroSection from "./HeroSection";
-import UnderlinedText from "./UnderlinedText";
+import UnderlinedText from "../../decorators/UnderlinedText";
 import TodayHighlight from "./TodayHighlight";
+import RotatedText from "@/components/decorators/RotatedText";
+import MasonryGrid from "./MasonryGrid";
 
 const AuthScreen = () => {
   return (
@@ -19,6 +21,12 @@ const AuthScreen = () => {
           </p>
           <div className="flex flex-col gap-10 mt-10">
             <TodayHighlight />
+            <div className="mt-24">
+              <p className="text-2xl md:text-5xl text-center tracking-tighter font-bold">
+                Meet the <RotatedText>Stars</RotatedText> of our Farm
+              </p>
+              <MasonryGrid />
+            </div>
           </div>
         </div>
       </div>
