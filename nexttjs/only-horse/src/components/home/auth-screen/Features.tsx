@@ -70,7 +70,7 @@ const Features = () => {
               <CardTitle>{title}</CardTitle>
             </CardHeader>
             <CardContent>{description}</CardContent>
-            <CardFooter className="mt-auto">
+            <CardFooter className="mt-auto justify-center">
               <img
                 src={image}
                 alt="Feature Item"
