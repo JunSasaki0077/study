@@ -1,7 +1,12 @@
 import BaseLayout from "@/components/BaseLayout";
+import UserProfile from "./UserProfile";
 
 const HomeScreen = () => {
-  return <BaseLayout>BaseLayout</BaseLayout>;
+  return (
+    <BaseLayout>
+      <UserProfile />
+    </BaseLayout>
+  );
 };
 
 export default HomeScreen;
