@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
-import {
-  getKindeServerSession,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/server";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import SuggestedProducts from "./SuggestedProducts";
 
 const BaseLayout = async ({
