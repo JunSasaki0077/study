@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-label";
+import { useMutation } from "@tanstack/react-query";
 import { TriangleAlert } from "lucide-react";
 
 import {
@@ -23,6 +24,8 @@ import {
 } from "next-cloudinary";
 import Image from "next/image";
 import { useState } from "react";
+import { createPostAction } from "../actions";
+import { useToast } from "@/components/ui/use-toast";
 
 const ContentTab = () => {
   const [text, setText] = useState<string>("");
@@ -30,12 +33,42 @@ const ContentTab = () => {
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [mediaUrl, setMediaUrl] = useState<string>("");
 
+  const { toast } = useToast();
+
+  const { mutate: createPost, isPending } = useMutation({
+    mutationKey: ["createPost"],
+    mutationFn: async () =>
+      createPostAction({ text, mediaUrl, isPublic, mediaType }),
+    onSuccess: () => {
+      toast({
+        title: "記事が投稿されました",
+        description: "記事が正常に追加されました。",
+      });
+      setText("");
+      setMediaType("video");
+      setIsPublic(false);
+      setMediaUrl("");
+    },
+    onError: (error) => {
+      toast({
+        title: "投稿ができませんでした。",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   return (
     <>
       <p className="text-3xl my-5 font-bold text-center uppercase">
         <UnderlinedText className="decoration-wavy">Share</UnderlinedText>
       </p>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          createPost();
+        }}
+      >
         <Card className="w-full max-w-md mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl">New Post</CardTitle>
@@ -135,8 +168,8 @@ const ContentTab = () => {
             </Alert>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" type="submit">
-              Create Post
+            <Button className="w-full" type="submit" disabled={isPending}>
+              {isPending ? "Creating Post..." : "Create Post"}
             </Button>
           </CardFooter>
         </Card>
