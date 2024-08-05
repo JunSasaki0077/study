@@ -22,12 +22,9 @@ export async function createPostAction({
   mediaType,
   text,
 }: PostArgs) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const admin = await checkIfAdmin();
 
-  const isAdmin = user?.email === process.env.ADMIN_EMAIL;
-
-  if (!user || !isAdmin) {
+  if (!admin) {
     throw new Error("Unauthorized");
   }
 
@@ -37,7 +34,7 @@ export async function createPostAction({
       mediaUrl,
       mediaType,
       isPublic,
-      userId: user.id,
+      userId: admin.id,
     },
   });
   return { success: true, post: newPost };
@@ -85,6 +82,29 @@ export async function addNewProductToStoreAction({
   });
 }
 
+export async function toggleProductArchiveAction(productId: string) {
+  const isAdmin = await checkIfAdmin();
+
+  if (!isAdmin) {
+    throw new Error("Unauthorized");
+  }
+
+  const product = await prisma.product.findUnique({ where: { id: productId } });
+
+  if (!product) {
+    throw new Error("商品が見つかりません。");
+  }
+
+  const updatedProduct = await prisma.product.update({
+    where: { id: productId },
+    data: {
+      isArchived: !product.isArchived,
+    },
+  });
+
+  return { success: true, product: updatedProduct };
+}
+
 async function checkIfAdmin() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -93,5 +113,5 @@ async function checkIfAdmin() {
 
   if (!user || !isAdmin) return false;
 
-  return true;
+  return user;
 }

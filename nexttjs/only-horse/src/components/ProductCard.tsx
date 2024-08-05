@@ -1,9 +1,13 @@
+"use client";
 import { DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { centsToDalls, cn } from "@/lib/utils";
 import ZoomedImage from "./ZoomedImage";
 import { Button, buttonVariants } from "./ui/button";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleProductArchiveAction } from "@/app/secret-dashboard/actions";
+import { useToast } from "./ui/use-toast";
 
 const ProductCard = ({
   product,
@@ -12,6 +16,29 @@ const ProductCard = ({
   product: any;
   adminView?: boolean;
 }) => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { mutate: toggleArchive, isPending } = useMutation({
+    mutationKey: ["toggleArchive"],
+    mutationFn: async () => await toggleProductArchiveAction(product.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
+      toast({
+        title: "成功しました",
+        description: `Product ${
+          product.isArchived ? "unarchived" : "archived"
+        }`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "エラーが発生しました",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
   return (
     <Card className="flex flex-col">
       <CardHeader className="px-2 flex flex-row items-center justify-between space-y-0 pb-2">
@@ -25,7 +52,12 @@ const ProductCard = ({
         <ZoomedImage imgSrc={product.image} />
         <div className="flex justify-center mt-auto">
           {adminView && (
-            <Button className="w-full" variant={"outline"}>
+            <Button
+              className="w-full"
+              variant={"outline"}
+              onClick={() => toggleArchive()}
+              disabled={isPending}
+            >
               {product.isArchived ? "Unarchive" : "Archive"}
             </Button>
           )}
