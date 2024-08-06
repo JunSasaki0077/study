@@ -10,14 +10,53 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CldUploadWidget, CloudinaryUploadWidgetInfo } from "next-cloudinary";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserProfileAction, updateUserProfileAction } from "./action";
+import { useToast } from "@/components/ui/use-toast";
 
 const UpdateProfileForm = () => {
   const [mediaUrl, setMediaUrl] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
+
+  const { toast } = useToast();
+
+  const { data: userProfile } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: async () => await getUserProfileAction(),
+  });
+
+  const { mutate: updateProfile, isPending } = useMutation({
+    mutationKey: ["updateProfile"],
+    mutationFn: updateUserProfileAction,
+    onSuccess: () => {
+      toast({
+        title: "更新しました。",
+        description: "プロフィールの更新が完了しました",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "更新できませんでした。",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleUpdateProfile = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateProfile({ name, image: mediaUrl });
+  };
+
+  useEffect(() => {
+    if (userProfile) {
+      setName(userProfile.name);
+    }
+  }, [userProfile]);
 
   return (
     <div className="px-2 md:px-10 my-20">
@@ -30,19 +69,20 @@ const UpdateProfileForm = () => {
           <div className="flex justify-center">
             <Avatar className="w-20 h-20">
               <AvatarImage
-                src="/user-placeholder.png"
+                src={mediaUrl || userProfile?.image || "user-placeholder.png"}
                 className="object-cover"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </div>
 
-          <form>
+          <form onSubmit={(e) => handleUpdateProfile(e)}>
             <Label>Name</Label>
             <Input
               placeholder="Enter your name"
-              value={"Burak Orkmez"}
+              value={name}
               className="my-2"
+              onChange={(e) => setName(e.target.value)}
             />
             <Label>Email</Label>
 
@@ -52,7 +92,7 @@ const UpdateProfileForm = () => {
                   <Input
                     placeholder="Enter your Email"
                     disabled
-                    value={"john@email.com"}
+                    value={userProfile?.email}
                     className="my-2"
                   />
                 </TooltipTrigger>
@@ -81,14 +121,14 @@ const UpdateProfileForm = () => {
                     type="button"
                     className="w-full mt-2 mb-4"
                   >
-                    Change Image
+                    画像を変更
                   </Button>
                 );
               }}
             </CldUploadWidget>
 
-            <Button className="w-full" type="submit">
-              Update
+            <Button className="w-full" type="submit" disabled={isPending}>
+              {isPending ? "更新中です..." : "更新"}
             </Button>
           </form>
         </CardContent>
