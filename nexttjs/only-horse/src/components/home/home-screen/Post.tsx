@@ -1,8 +1,10 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { user } from "@/dummy_data";
 import { cn } from "@/lib/utils";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { Post as PostType, Prisma, User } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Heart,
   ImageIcon,
@@ -10,26 +12,67 @@ import {
   MessageCircle,
   Trash,
 } from "lucide-react";
+import { CldVideoPlayer } from "next-cloudinary";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { deletePostAction } from "./action";
+import { useToast } from "@/components/ui/use-toast";
+
+type PostWithComments = Prisma.PostGetPayload<{
+  include: {
+    comments: {
+      include: {
+        user: true;
+      };
+    };
+    likesList: true;
+  };
+}>;
 
 const Post = ({
   post,
   isSubscribed,
   admin,
 }: {
-  post: any;
+  post: PostWithComments;
   isSubscribed: boolean;
-  admin: any;
+  admin: User;
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const { user } = useKindeBrowserClient();
+
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { mutate: deletePost } = useMutation({
+    mutationKey: ["deletePost"],
+    mutationFn: async () => await deletePostAction(post.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast({
+        title: "成功しました。",
+        description: "記事の削除に成功しました。",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "失敗しました。",
+        description: "記事の削除に失敗しました。",
+        variant: "destructive",
+      });
+    },
+  });
+
   return (
     <div className="flex flex-col gap-3 p-3 border-t">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar>
-            <AvatarImage src={admin.image || "/user-placeholder.png"} />
+            <AvatarImage
+              src={admin.image || "/user-placeholder.png"}
+              className="object-cover"
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
@@ -39,8 +82,13 @@ const Post = ({
           <p className="text-zinc-400 text-xs md:text-sm tracking-tighter">
             17.07.2024
           </p>
-          {admin.id === user.id && (
-            <Trash className="w-5 h-5 text-muted-foreground hover:text-red-500 cursor-pointer" />
+          {admin.id === user?.id && (
+            <Trash
+              className="w-5 h-5 text-muted-foreground hover:text-red-500 cursor-pointer"
+              onClick={() => {
+                deletePost();
+              }}
+            />
           )}
         </div>
       </div>
@@ -58,7 +106,18 @@ const Post = ({
             />
           </div>
         )}
-      {/* {(post.isPublic || isSubscribed) && post.mediaUrl && post.mediaType === "video" && ()} */}
+      {(post.isPublic || isSubscribed) &&
+        post.mediaUrl &&
+        post.mediaType === "video" && (
+          <div className="w-full mx-auto">
+            <CldVideoPlayer
+              width={960}
+              height={540}
+              className="rounded-md"
+              src={post.mediaUrl}
+            />
+          </div>
+        )}
       {!isSubscribed && !post.isPublic && (
         <div className="w-full bg-slate-800 relative h-96 rounded-md bg-of flex flex-col justify-center items-center px-5 overflow-hidden">
           <LockKeyholeIcon className="w-16 h-16 text-zinc-400 mb-20 z-0" />
