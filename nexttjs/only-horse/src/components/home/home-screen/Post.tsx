@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Post as PostType, Prisma, User } from "@prisma/client";
@@ -15,9 +15,25 @@ import {
 import { CldVideoPlayer } from "next-cloudinary";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { deletePostAction } from "./action";
+import { useEffect, useState } from "react";
+import {
+  commentOnPostAction,
+  deletePostAction,
+  likePostAction,
+} from "./action";
 import { useToast } from "@/components/ui/use-toast";
+import { title } from "process";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import Comment from "./Comment";
 
 type PostWithComments = Prisma.PostGetPayload<{
   include: {
@@ -40,6 +56,7 @@ const Post = ({
   admin: User;
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [comment, setComment] = useState("");
   const { user } = useKindeBrowserClient();
 
   const { toast } = useToast();
@@ -63,6 +80,57 @@ const Post = ({
       });
     },
   });
+
+  const { mutate: likePost } = useMutation({
+    mutationKey: ["likePost"],
+    mutationFn: async () => {
+      post.likes += isLiked ? -1 : 1;
+      setIsLiked(!isLiked);
+      await likePostAction(post.id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const { mutate: commentPost, isPending: isCommenting } = useMutation({
+    mutationKey: ["commentPost"],
+    mutationFn: async () => await commentOnPostAction(post.id, comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      setComment("");
+      toast({
+        title: "成功しました。",
+        description: "コメント追加に成功しました。",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCommentSubmission = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    if (!comment) return;
+    commentPost();
+  };
+
+  useEffect(() => {
+    if (post.likesList && user?.id) setIsLiked(post.likesList.length > 0);
+  }, [post.likesList, user?.id]);
 
   return (
     <div className="flex flex-col gap-3 p-3 border-t">
@@ -149,13 +217,63 @@ const Post = ({
               "text-red-500": isLiked,
               "fill-red-500": isLiked,
             })}
-            onClick={() => setIsLiked(!isLiked)}
+            onClick={() => {
+              if (!isSubscribed) return;
+              likePost();
+            }}
           />
-          <div className="text-xs text-zinc-400 tracking-tighter">55</div>
+          <span className="text-xs text-zinc-400 tracking-tighter">
+            {post.likes}
+          </span>
         </div>
+
         <div className="flex gap-1 items-center">
-          <MessageCircle className="w-5 h-5 cursor-pointer " />
-          <div className="text-xs text-zinc-400 tracking-tighter">44</div>
+          <Dialog>
+            <DialogTrigger>
+              <MessageCircle className="w-5 h-5 cursor-pointer" />
+            </DialogTrigger>
+            {isSubscribed && (
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Comments</DialogTitle>
+                </DialogHeader>
+                <ScrollArea className="h-[400px] w-[350px] rounded-md p-4">
+                  {post.comments.map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                  ))}
+                  {post.comments.length === 0 && (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <p className="text-zinc-400">No commnets yet</p>
+                    </div>
+                  )}
+                </ScrollArea>
+
+                <form onSubmit={handleCommentSubmission}>
+                  <Input
+                    placeholder="Add a comment"
+                    onChange={(e) => setComment(e.target.value)}
+                    value={comment}
+                  />
+
+                  <DialogFooter>
+                    <Button
+                      type="submit"
+                      className="mt-4"
+                      disabled={isCommenting}
+                    >
+                      {isCommenting ? "Commenting..." : "Comment"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            )}
+          </Dialog>
+
+          <div className="flex gap-1 items-center">
+            <span className="text-xs text-zinc-400 tracking-tighter">
+              {post.comments.length > 0 ? post.comments.length : 0}
+            </span>
+          </div>
         </div>
       </div>
     </div>
