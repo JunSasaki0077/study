@@ -5,12 +5,6 @@ import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -22,14 +16,14 @@ export function ModeToggle() {
         size={"icon"}
         onClick={() => setTheme("light")}
       >
-        <SunIcon />
+        <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 text-muted-foreground" />
       </Button>
       <Button
         variant={"outline"}
         size={"icon"}
         onClick={() => setTheme("dark")}
       >
-        <MoonIcon />
+        <MoonIcon className="absolute h-[1.2rem] w-[1.2rem]  transition-all  dark:scale-100 text-muted-foreground" />
       </Button>
     </div>
   );
