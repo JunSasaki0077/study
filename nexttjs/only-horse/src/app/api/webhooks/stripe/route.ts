@@ -4,6 +4,11 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { Resend } from "resend";
+import WelcomeEmail from "@/emails/WelcomeEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 const webhookSecret =
   process.env.NODE_ENV === "development"
     ? process.env.STRIPE_WEBHOOK_SECRET_DEV_KEY!
@@ -89,6 +94,18 @@ export async function POST(req: Request) {
               await prisma.user.update({
                 where: { id: user.id },
                 data: { isSubscribed: true },
+              });
+
+              await resend.emails.send({
+                from: "OnlyHorse <onboarding@resend.dev>",
+                to: [customerDetails.email],
+                subject: "Subscription Confirmation",
+                react: WelcomeEmail({
+                  userEmail: customerDetails.email,
+                  userName: user.name,
+                  subscriptionStartDate: subscription.startDate,
+                  subscriptionEndDate: subscription.endDate,
+                }),
               });
             } else {
               // TODO=> Handle one time payment(buying tshirts)
