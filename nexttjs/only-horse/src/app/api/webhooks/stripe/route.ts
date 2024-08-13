@@ -115,6 +115,10 @@ export async function POST(req: Request) {
         }
         break;
       }
+
+      default:
+        console.warn(`Unhandled event type: ${eventType}`);
+        break;
     }
     return NextResponse.json({});
   } catch (error) {}

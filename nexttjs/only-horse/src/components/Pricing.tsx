@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import styles from "./styles/pricing.module.css";
+import styles from "@/components/styles/pricing.module.css";
 
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export interface PricingTierFrequency {
   id: string;
@@ -17,7 +18,6 @@ export interface PricingTierFrequency {
 export interface PricingTier {
   name: string;
   id: string;
-  href: string;
   discountPrice: string | Record<string, string>;
   price: string | Record<string, string>;
   description: string | React.ReactNode;
@@ -26,6 +26,8 @@ export interface PricingTier {
   highlighted?: boolean;
   cta: string;
   soldOut?: boolean;
+  monthlyUrl: string;
+  yearlyUrl: string;
 }
 
 export const frequencies: PricingTierFrequency[] = [
@@ -35,21 +37,25 @@ export const frequencies: PricingTierFrequency[] = [
 
 export const tiers: PricingTier[] = [
   {
-    name: "Premium",
+    name: "Premium Plan",
     id: "0",
-    href: "/subscribe",
     price: { "1": "$89", "2": "$999" },
-    discountPrice: { "1": "$59", "2": "$599" },
+    discountPrice: { "1": "$59", "2": "$499" },
     description: `Get access to our exclusive content. Cancel anytime.`,
     features: [
       `Access to all premium content`,
-      `Comment your thoughts`,
-      `Like your favorite posts`,
+      "Comment your thoughts",
+      "Like your favorite posts",
     ],
-    featured: false,
-    highlighted: false,
-    soldOut: false,
     cta: `Join Us`,
+    monthlyUrl:
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_STRIPE_DEV_MONTHLY_URL!
+        : process.env.NEXT_PUBLIC_STRIPE_LIVE_MONTHLY_URL!,
+    yearlyUrl:
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_STRIPE_DEV_YEARLY_URL!
+        : process.env.NEXT_PUBLIC_STRIPE_LIVE_YEARLY_URL!,
   },
 ];
 
@@ -76,14 +82,24 @@ export default function Pricing() {
   const tier = tiers[0];
   const bannerText = "Save 25% on all plans for a limited time";
 
+  const monthlyUrl = tier.monthlyUrl;
+  const yearlyUrl = tier.yearlyUrl;
+
+  const saveStripeLinkToLocalStorage = (url: string) => {
+    localStorage.setItem("stripeRedirectUrl", url);
+  };
+
   return (
     <div
-      className={cn("flex flex-col w-full items-center", styles.fancyOverlay)}
+      className={cn(
+        "flex flex-col w-full items-center mt-32",
+        styles.fancyOverlay
+      )}
     >
       <div className="w-full flex flex-col items-center mb-24">
         <div className="mx-auto max-w-7xl px-6 xl:px-8">
           <div className="mx-auto max-w-2xl sm:text-center">
-            <h1 className="text-black dark:text-white text-4xl font-semibold max-w-xs sm:max-w-none md:text-6xl !leading-tight">
+            <h1 className="text-center text-black dark:text-white text-4xl font-semibold max-w-xs sm:max-w-none md:text-6xl !leading-tight">
               Pricing
             </h1>
           </div>
@@ -200,14 +216,21 @@ export default function Pricing() {
                       {frequency.priceSuffix}
                     </span>
                   </p>
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex justify-center mt-8 flex-shrink-0"
+
+                  <Button
+                    asChild
+                    size="lg"
+                    className="my-3"
+                    onClick={() => {
+                      if (frequency.value === "1") {
+                        saveStripeLinkToLocalStorage(monthlyUrl);
+                      } else {
+                        saveStripeLinkToLocalStorage(yearlyUrl);
+                      }
+                    }}
                   >
-                    <Button size="lg">{tier.cta}</Button>
-                  </a>
+                    <Link href={"/api/auth/login"}>{tier.cta}</Link>
+                  </Button>
                 </div>
               </div>
             </div>
