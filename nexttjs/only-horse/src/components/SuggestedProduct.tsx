@@ -24,7 +24,7 @@ const SuggestedProduct = ({ product }: { product: Product }) => {
         <ZoomedImage imgSrc={product.image} className="h-44 object-cover" />
         <div className="flex justify-center mt-auto">
           <Link
-            href={"/merch/${product.id"}
+            href={`/merch/${product.id}`}
             className={cn("w-full", buttonVariants({ size: "sm" }))}
           >
             Buy

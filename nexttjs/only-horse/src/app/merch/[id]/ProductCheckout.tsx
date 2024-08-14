@@ -9,13 +9,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import ZoomedImage from "@/components/ZoomedImage";
 import { centsToDalls } from "@/lib/utils";
 import { Product } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { createCheckoutSessionAction } from "./actions";
+import { useRouter } from "next/navigation";
 
 const ProductCheckout = ({ product }: { product: Product }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const { mutate: createCheckoutSession, isPending } = useMutation({
+    mutationKey: ["createCheckoutSession"],
+    mutationFn: createCheckoutSessionAction,
+    onSuccess: ({ url }) => {
+      if (url) router.push(url);
+      else
+        throw new Error(
+          "Error creating checkout session. Please try again later "
+        );
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description:
+          error.message || "Something wrong. Please try again later.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleBuyProduct = async () => {
+    if (!selectedSize) {
+      toast({
+        title: "Error",
+        description: "Please select a size",
+        variant: "destructive",
+      });
+      return;
+    }
+    createCheckoutSession({ productId: product.id, size: selectedSize });
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-5">
       <ZoomedImage imgSrc={product.image} />
@@ -38,10 +77,11 @@ const ProductCheckout = ({ product }: { product: Product }) => {
         </Select>
         <Button
           className="mt-5 text-white px-5 py-2 rounded-md"
+          disabled={isPending}
           size={"sm"}
-          onClick={() => alert("Bought!" + selectedSize)}
+          onClick={handleBuyProduct}
         >
-          Buy Now
+          {isPending ? "Processing..." : "Buy Now"}
         </Button>
       </div>
     </div>

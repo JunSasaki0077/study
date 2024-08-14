@@ -6,6 +6,7 @@ import Stripe from "stripe";
 
 import { Resend } from "resend";
 import WelcomeEmail from "@/emails/WelcomeEmail";
+import ReceiptEmail from "@/emails/ReceiptEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -96,19 +97,65 @@ export async function POST(req: Request) {
                 data: { isSubscribed: true },
               });
 
-              await resend.emails.send({
-                from: "OnlyHorse <onboarding@resend.dev>",
-                to: [customerDetails.email],
-                subject: "Subscription Confirmation",
-                react: WelcomeEmail({
-                  userEmail: customerDetails.email,
-                  userName: user.name,
-                  subscriptionStartDate: subscription.startDate,
-                  subscriptionEndDate: subscription.endDate,
-                }),
-              });
+              if (process.env.NODE_ENV !== "production") {
+                await resend.emails.send({
+                  from: "OnlyHorse <ikasas0077@gmail.com>",
+                  to: [customerDetails.email],
+                  subject: "Subscription Confirmation",
+                  react: WelcomeEmail({
+                    userEmail: customerDetails.email,
+                    userName: user.name,
+                    subscriptionStartDate: subscription.startDate,
+                    subscriptionEndDate: subscription.endDate,
+                  }),
+                });
+              }
             } else {
-              // TODO=> Handle one time payment(buying tshirts)
+              const { orderId, size } = session.metadata as {
+                orderId: string;
+                size: string;
+              };
+
+              const shippingDetails = session.shipping_details?.address;
+
+              const updatedOrder = await prisma.order.update({
+                where: { id: orderId },
+                data: {
+                  isPaid: true,
+                  size,
+                  shippingAddress: {
+                    create: {
+                      address: shippingDetails?.line1 ?? "",
+                      city: shippingDetails?.city ?? "",
+                      state: shippingDetails?.state ?? "",
+                      postalCode: shippingDetails?.postal_code ?? "",
+                      country: shippingDetails?.country ?? "",
+                    },
+                  },
+                },
+                select: {
+                  id: true,
+                  product: true,
+                  size: true,
+                  shippingAddress: true,
+                },
+              });
+              if (process.env.NODE_ENV !== "production") {
+                await resend.emails.send({
+                  from: "OnlyHorse <ikasas0077@gmail.com>",
+                  to: [customerDetails.email],
+                  subject: "Order Confirmation",
+                  react: ReceiptEmail({
+                    orderDate: new Date(),
+                    orderNumber: updatedOrder.id,
+                    productImage: updatedOrder.product.image,
+                    productName: updatedOrder.product.name,
+                    productSize: updatedOrder.size,
+                    shippingAddress: updatedOrder.shippingAddress!,
+                    userName: user.name!,
+                  }),
+                });
+              }
             }
           }
         }
@@ -137,6 +184,6 @@ export async function POST(req: Request) {
         console.warn(`Unhandled event type: ${eventType}`);
         break;
     }
-    return NextResponse.json({});
   } catch (error) {}
+  return NextResponse.json({});
 }
