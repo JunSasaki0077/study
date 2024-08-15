@@ -51,7 +51,6 @@ export const ReceiptEmail = ({
         <Section style={message}>
           <Img
             src={`${BASE_URL}/email-logo.png`}
-            // src={"https://i.ibb.co/zRQ6qcJ/email-logo.png"}
             width="120"
             height="80"
             alt="Nike"
