@@ -1,3 +1,9 @@
+import MovieVideo from "../components/MovieVideo";
+
 export default function HomePage() {
-  return <h1>Hello from HomePage</h1>;
+  return (
+    <div className="p-5 lg:p-0">
+      <MovieVideo />
+    </div>
+  );
 }
