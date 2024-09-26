@@ -88,7 +88,7 @@ const CategoryPage = async ({ params }: { params: { genre: string } }) => {
   return (
     <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-5 sm:px-0  mt-10 gap-6">
       {data.map((movie) => (
-        <div key={movie.id} className="relative h-48">
+        <div key={movie.id} className="relative h-60">
           <Image
             src={movie.imageString}
             alt="Movie"
