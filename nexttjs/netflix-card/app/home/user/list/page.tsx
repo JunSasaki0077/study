@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 
 const getData = async (userId: string) => {
-  const data = prisma.watchList.findMany({
+  const data = await prisma.watchList.findMany({
     where: {
       userId: userId,
     },
@@ -30,7 +30,7 @@ const getData = async (userId: string) => {
 
 const WatchList = async () => {
   const session = await getServerSession(authOptions);
-  const data = await getData("abs");
+  const data = await getData(session?.user?.email as string);
 
   return (
     <>
