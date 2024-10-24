@@ -97,6 +97,9 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
               </DropdownMenu>
             </div>
           </header>
+          <main className="flex flex-1 flex-col gap-4 lg:gap-6 lg:p-6">
+            {children}
+          </main>
         </div>
       </div>
     </>
