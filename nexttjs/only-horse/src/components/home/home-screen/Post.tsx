@@ -148,7 +148,7 @@ const Post = ({
         </div>
         <div className="flex gap-2 items-center">
           <p className="text-zinc-400 text-xs md:text-sm tracking-tighter">
-            17.07.2024
+            {post.createdAt}
           </p>
           {admin.id === user?.id && (
             <Trash

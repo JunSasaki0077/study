@@ -48,7 +48,13 @@ const Header = () => {
   return (
     <div className="min-h-[10vh] px-16 py-6 w-full bg-white flex justify-between items-center shadow-sm">
       <Link href="/">
-        <Image src={"/pokemon--logo.png"} alt="logo" width={120} height={90} />
+        <Image
+          src={"/pokemon--logo.png"}
+          width={120}
+          height={90}
+          alt="logo"
+          priority
+        />
       </Link>
       <nav>
         <ul className="flex items-center gap-8 text-gray-400">
