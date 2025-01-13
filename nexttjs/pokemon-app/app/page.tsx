@@ -4,15 +4,10 @@ import Header from "@/components/Header";
 import PokemonCard from "@/components/PokemonCard";
 import { useGlobalContext } from "@/context/globalContext";
 import { arrowAngleDown } from "@/utils/Icons";
-import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Home() {
-  const { isLoading } = useUser();
   const { pokemonListDetails, loadMore, loading } = useGlobalContext();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
   return (
     <main>
       <Header />
