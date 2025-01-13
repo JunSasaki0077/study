@@ -11,6 +11,7 @@ export const GlobalContextProvider = ({ children }) => {
     pokemonListDetails,
     fetchPokemonByName,
     activePokemon,
+    loadMore,
   } = usePokemonData();
   return (
     <GlobalContext.Provider
@@ -21,6 +22,7 @@ export const GlobalContextProvider = ({ children }) => {
         pokemonListDetails,
         fetchPokemonByName,
         activePokemon,
+        loadMore,
       }}
     >
       {children}

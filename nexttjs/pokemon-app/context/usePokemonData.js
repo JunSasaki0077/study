@@ -20,7 +20,7 @@ export const usePokemonData = () => {
     try {
       const offset = (page - 1) * 50;
       const res = await axios.get(
-        `${pokemonBaseUrl}/pokemon?limit=20&offset=${offset}`
+        `${pokemonBaseUrl}/pokemon?offset=${offset}&limit=40`
       );
       setLoading(false);
 
@@ -67,8 +67,12 @@ export const usePokemonData = () => {
 
       return res.data;
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching pokemon by name", error);
     }
+  };
+
+  const loadMore = () => {
+    fetchPokemon(currentPage + 1);
   };
 
   useEffect(() => {
@@ -89,5 +93,6 @@ export const usePokemonData = () => {
     pokemonListDetails,
     fetchPokemonByName,
     activePokemon,
+    loadMore,
   };
 };

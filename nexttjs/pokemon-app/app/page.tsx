@@ -3,11 +3,12 @@
 import Header from "@/components/Header";
 import PokemonCard from "@/components/PokemonCard";
 import { useGlobalContext } from "@/context/globalContext";
+import { arrowAngleDown } from "@/utils/Icons";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Home() {
   const { isLoading } = useUser();
-  const { pokemonListDetails, loading } = useGlobalContext();
+  const { pokemonListDetails, loadMore, loading } = useGlobalContext();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -24,6 +25,19 @@ export default function Home() {
             })}
         </div>
       </section>
+      {pokemonListDetails.length > 38 && (
+        <div className="mt-4 mb-10 flex items-center justify-center">
+          <button
+            onClick={loadMore}
+            className="flex items-center gap-2 bg-[#6c5ce7] rounded-full shadow-md font-medium py-2 px-6
+            hover:bg-green-400 text-white transition-all duration-300 ease-in-out
+            "
+          >
+            <span className="text-left">{arrowAngleDown}</span>
+            Load More
+          </button>
+        </div>
+      )}
     </main>
   );
 }
