@@ -1,35 +1,78 @@
 "use client";
+import { useGlobalContext } from "@/context/globalContext";
 import { typeColor } from "@/utils/colors";
-import { arrowAngleRight, bookmarkEmpty, heartEmpty } from "@/utils/Icons";
+import {
+  arrowAngleRight,
+  bookmarkEmpty,
+  bookmarkFilled,
+  heartEmpty,
+  heartFilled,
+} from "@/utils/Icons";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface PokemonCardProps {
   pokemon: any;
 }
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+  const { user } = useUser();
+  const { performAction } = useGlobalContext();
   const router = useRouter();
+
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+
   return (
     <div className="relative p-4 bg-white rounded-xl shadow-sm flex flex-col gap-2">
       <div className="flex justify-between items-center">
         <div className="flex gap-4 bg-white rounded-tl-xl rounded-tr-xl">
           <button
-            className={`p-2 w-10 h-10 text-xl flex items-center text-gray-300 justify-center rounded-full border-2`}
+            className={`p-2 w-10 h-10 text-xl flex items-center  justify-center rounded-full border-2
+              ${
+                liked
+                  ? "text-[#fd4878] border-[#fd4878]"
+                  : "text-gray-300 border-gray-300"
+              } 
+              
+              `}
+            onClick={() => {
+              if (user?.sub) {
+                setLiked((prev: boolean) => !prev);
+                performAction(user?.sub, pokemon?.name, "like");
+              } else {
+                router.push("/api/auth/login");
+              }
+            }}
           >
-            {heartEmpty}
+            {liked ? heartFilled : heartEmpty}
           </button>
           <button
-            className={`p-2 w-10 h-10 text-xl flex items-center text-gray-300 justify-center rounded-full border-2`}
+            className={`p-2 w-10 h-10 text-xl flex items-center  justify-center rounded-full border-2
+              ${
+                bookmarked
+                  ? "text-[#00b894] border-[#00b894]"
+                  : "text-gray-300 border-gray-300"
+              }
+              `}
           >
-            {bookmarkEmpty}
+            {bookmarked ? bookmarkFilled : bookmarkEmpty}
           </button>
         </div>
         <button
           className="p-2 w-10 h-10 text-xl flex items-center justify-center rounded-full border-2 text-gray-300 border-gray-300
 				hover:bg-[#00b894] hover:border-transparent hover:text-white transition-all duration-300 ease-in-out
 				"
-          onClick={() => router.push(`/pokemon/${pokemon?.name}`)}
+          onClick={() => {
+            if (user?.sub) {
+              setBookmarked((prev: boolean) => !prev);
+              performAction(user?.sub, pokemon?.name, "bookmark");
+            } else {
+              router.push("/api/auth/login");
+            }
+          }}
         >
           {arrowAngleRight}
         </button>
