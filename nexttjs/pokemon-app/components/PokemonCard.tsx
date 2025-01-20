@@ -11,7 +11,7 @@ import {
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PokemonCardProps {
   pokemon: any;
@@ -19,11 +19,22 @@ interface PokemonCardProps {
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const { user } = useUser();
-  const { performAction } = useGlobalContext();
+  const { performAction, userDetails } = useGlobalContext();
   const router = useRouter();
 
-  const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const isLiked = userDetails?.liked.includes(pokemon?.name);
+  const isBookmarked = userDetails?.bookmarks?.includes(pokemon?.name);
+
+  const [liked, setLiked] = useState(isLiked);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
+
+  useEffect(() => {
+    setLiked(isLiked);
+  }, [isLiked]);
+
+  useEffect(() => {
+    setBookmarked(isBookmarked);
+  }, [isBookmarked]);
 
   return (
     <div className="relative p-4 bg-white rounded-xl shadow-sm flex flex-col gap-2">
@@ -57,6 +68,14 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                   : "text-gray-300 border-gray-300"
               }
               `}
+            onClick={() => {
+              if (user?.sub) {
+                setBookmarked((prev: boolean) => !prev);
+                performAction(user?.sub, pokemon?.name, "bookmark");
+              } else {
+                router.push("/api/auth/login");
+              }
+            }}
           >
             {bookmarked ? bookmarkFilled : bookmarkEmpty}
           </button>
@@ -65,14 +84,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           className="p-2 w-10 h-10 text-xl flex items-center justify-center rounded-full border-2 text-gray-300 border-gray-300
 				hover:bg-[#00b894] hover:border-transparent hover:text-white transition-all duration-300 ease-in-out
 				"
-          onClick={() => {
-            if (user?.sub) {
-              setBookmarked((prev: boolean) => !prev);
-              performAction(user?.sub, pokemon?.name, "bookmark");
-            } else {
-              router.push("/api/auth/login");
-            }
-          }}
+          onClick={() => router.push(`/pokemon/${pokemon?.name}`)}
         >
           {arrowAngleRight}
         </button>
