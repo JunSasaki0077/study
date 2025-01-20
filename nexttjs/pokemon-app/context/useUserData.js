@@ -27,6 +27,7 @@ export const useUserData = () => {
       });
     } catch (error) {
       console.log("Error in performAction", error);
+      fetchUserDetails(userId);
     }
   };
 
