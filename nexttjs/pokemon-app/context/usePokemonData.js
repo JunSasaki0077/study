@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import _ from "lodash";
 
 const pokemonBaseUrl = "https://pokeapi.co/api/v2";
 
@@ -11,6 +12,7 @@ export const usePokemonData = () => {
   const [allPokemon, setAllPokemon] = useState([]);
   const [pokemonListDetails, setPokemonListDetails] = useState([]);
   const [activePokemon, setActivePokemon] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [originalPokemonListDetails, setOriginalPokemonListDetails] = useState(
     []
   );
@@ -71,8 +73,53 @@ export const usePokemonData = () => {
     }
   };
 
+  const searchPokemon = async (query) => {
+    if (!query) {
+      setSearchQuery("");
+
+      const details = await Promise.all(
+        pokemonList.map(async (pokemon) => {
+          const res = await axios.get(pokemon.url);
+          return res.data;
+        })
+      );
+      setPokemonListDetails(details);
+      return;
+    }
+    setLoading(true);
+
+    const filteredPokemon = allPokemon.filter((pokemon) => {
+      return pokemon.name.toLowerCase().includes(query.toLowerCase());
+    });
+
+    try {
+      const filtered = await Promise.all(
+        filteredPokemon.map(async (pokemon) => {
+          const res = await axios.get(pokemon.url);
+
+          return res.data;
+        })
+      );
+
+      setLoading(false);
+      setPokemonListDetails(filtered);
+    } catch (error) {
+      console.error("Error searching pokemon", error);
+    }
+  };
+
+  const debouncedSearch = _.debounce((value) => {
+    searchPokemon(value);
+  }, 500);
+
   const loadMore = () => {
     fetchPokemon(currentPage + 1);
+  };
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    debouncedSearch(value);
   };
 
   useEffect(() => {
@@ -94,5 +141,7 @@ export const usePokemonData = () => {
     fetchPokemonByName,
     activePokemon,
     loadMore,
+    searchPokemon,
+    handleSearchChange,
   };
 };
