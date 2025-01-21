@@ -18,8 +18,29 @@ export const useUserData = () => {
   };
 
   const performAction = async (userId, pokemon, action) => {
-    if (!user) return console.log("User not logged in");
     try {
+      setUserDetails((prev) => {
+        const updatedBookmarks =
+          action === "bookmark"
+            ? prev.bookmarks.includes(pokemon)
+              ? prev.bookmarks.filter((p) => p !== pokemon)
+              : [...prev.bookmarks, pokemon]
+            : prev.bookmarks;
+
+        const updatedLikes =
+          action === "like"
+            ? prev.liked.includes(pokemon)
+              ? prev.liked.filter((p) => p !== pokemon)
+              : [...prev.liked, pokemon]
+            : prev.liked;
+
+        return {
+          ...prev,
+          bookmarks: updatedBookmarks,
+          liked: updatedLikes,
+        };
+      });
+
       await axios.post("/api/pokemon", {
         userId,
         pokemon,
