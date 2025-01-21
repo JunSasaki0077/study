@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Header from "@/components/Header";
@@ -30,20 +31,32 @@ const Page = () => {
     }
   }, [userDetails?.liked]);
 
+  if (loading) {
+    return (
+      <div className="h-[100vh] flex justify-center items-center">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
   return (
     <main>
       <Header />
-      <section className="min-h-[91vh]">
-        {likedPokemons.length > 0 ? (
-          <div className="px-16 py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {likedPokemons.map((pokemon: any, index: number) => (
-              <PokemonCard key={pokemon.name + index} pokemon={pokemon} />
-            ))}
-          </div>
-        ) : (
-          <div>No liked pokemons</div>
-        )}
-      </section>
+      {!loading && (
+        <section className="min-h-[91vh]">
+          {likedPokemons.length > 0 ? (
+            <div className="px-16 py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {likedPokemons.map((pokemon: any, index: number) => (
+                <PokemonCard key={pokemon.name + index} pokemon={pokemon} />
+              ))}
+            </div>
+          ) : (
+            <h2 className="text-center text-2xl font-bold text-gray-800 mt-20">
+              No liked pokemons
+            </h2>
+          )}
+        </section>
+      )}
     </main>
   );
 };
