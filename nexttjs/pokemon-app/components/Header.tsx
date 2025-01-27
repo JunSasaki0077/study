@@ -57,7 +57,7 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex items-center gap-8 text-gray-400">
+        <ul className="hidden md:flex items-center gap-8 text-gray-400">
           {menu.map((item, index: number) => (
             <li key={index}>
               <Link
