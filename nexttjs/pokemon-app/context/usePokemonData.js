@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
@@ -123,8 +124,8 @@ export const usePokemonData = () => {
     let filteredPokemon = originalPokemonListDetails;
 
     if (type) {
-      filterPokemon = filteredPokemon.filter((pokemon) => {
-        return pokemon.types.some((type) => type.type.name === type);
+      filteredPokemon = filteredPokemon.filter((pokemon) => {
+        return pokemon.types.some((t) => t.type.name === type);
       });
     }
     if (ability) {
@@ -152,7 +153,7 @@ export const usePokemonData = () => {
     }
 
     if (sortOrder) {
-      filterPokemon =
+      filteredPokemon =
         sortOrder === "asc"
           ? [...filteredPokemon].sort((a, b) => {
               return a.name.localeCompare(b.name, undefined, {
