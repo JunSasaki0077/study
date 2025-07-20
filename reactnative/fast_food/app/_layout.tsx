@@ -1,9 +1,17 @@
+import * as Sentry from '@sentry/react-native'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
 import './global.css'
 
-export default function RootLayout() {
+Sentry.init({
+  dsn: 'https://703439d5e68250dcc7702f539152ca0d@o4507828963901440.ingest.us.sentry.io/4507828971569152',
+  // Adds more context data to events (IP address, cookies, user, etc.)
+  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+  sendDefaultPii: true,
+})
+
+export default Sentry.wrap(function RootLayout() {
   const [fontsLoaded, error] = useFonts({
     'QuickSand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
     'QuickSand-Medium': require('../assets/fonts/Quicksand-Medium.ttf'),
@@ -17,4 +25,4 @@ export default function RootLayout() {
     if (fontsLoaded) SplashScreen.hideAsync()
   }, [fontsLoaded, error])
   return <Stack screenOptions={{ headerShown: false }} />
-}
+})
