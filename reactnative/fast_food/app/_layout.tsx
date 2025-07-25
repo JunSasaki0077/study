@@ -7,8 +7,6 @@ import './global.css'
 
 Sentry.init({
   dsn: 'https://703439d5e68250dcc7702f539152ca0d@o4507828963901440.ingest.us.sentry.io/4507828971569152',
-  // Adds more context data to events (IP address, cookies, user, etc.)
-  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
   sendDefaultPii: true,
 })
 
