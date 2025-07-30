@@ -1,13 +1,17 @@
 import CartButton from '@/components/CartButton'
 import MenuCard from '@/components/MenuCard'
 import { getCategories, getMenu } from '@/lib/appwrite'
-import useAppwrite from '@/lib/useAppwite'
+import useAppwrite from '@/lib/useAppwrite'
 import { MenuItem } from '@/type'
 import cn from 'clsx'
 import { useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+import Filter from '@/components/Filter'
+import SearchBar from '@/components/SearchBar'
+
 const Search = () => {
   const { category, query } = useLocalSearchParams<{
     query: string
@@ -18,7 +22,7 @@ const Search = () => {
     fn: getMenu,
     params: { category, query, limit: 6 },
   })
-  const { data: categories } = useAppwrite({ fn: getCategories })
+  const { data: categories }: any = useAppwrite({ fn: getCategories })
 
   useEffect(() => {
     refetch({ category, query, limit: 6 })
@@ -53,16 +57,19 @@ const Search = () => {
                 <Text className="small-bold uppercase text-primary">
                   Search
                 </Text>
-                <View className="flex-start flex-row gap-x1 mt-0.5 ">
+                <View className="flex-start flex-row gap-x-1 mt-0.5">
                   <Text className="paragraph-semibold text-dark-100">
                     Find your favorite food
                   </Text>
                 </View>
               </View>
+
               <CartButton />
             </View>
-            <Text>Serch Input</Text>
-            <Text>Filter</Text>
+
+            <SearchBar />
+
+            <Filter categories={categories!} />
           </View>
         )}
         ListEmptyComponent={() => !loading && <Text>No results</Text>}
@@ -70,4 +77,5 @@ const Search = () => {
     </SafeAreaView>
   )
 }
+
 export default Search

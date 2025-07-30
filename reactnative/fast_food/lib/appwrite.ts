@@ -1,4 +1,4 @@
-import { CreateUserParams, GetMenuParams, SignInParams } from "@/type"
+import { CreateUserPrams, GetMenuParams, SignInParams } from "@/type"
 import { Account, Avatars, Client, Databases, ID, Query, Storage } from "react-native-appwrite"
 
 export const appwriteConfig = {
@@ -26,7 +26,7 @@ export const databases = new Databases(client)
 export const avatars = new Avatars(client)
 export const storage = new Storage(client)
 
-export const createUser = async ({email,password,name}: CreateUserParams) => {
+export const createUser = async ({email,password,name}: CreateUserPrams) => {
 	try {
 		const newAccount = await account.create(ID.unique(),email,password,name)
 		if(!newAccount)  throw Error;
