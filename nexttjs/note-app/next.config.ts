@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ['avatars.githubusercontent.com'],//ここに画像のドメインを設定する
+  },
 };
 
 export default nextConfig;
