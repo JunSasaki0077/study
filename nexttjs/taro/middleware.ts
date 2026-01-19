@@ -17,5 +17,7 @@ export async function middleware(request: NextRequest) {
 }
 export const config = {
   
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico¥llms\\.txt|.*\\.(png|jpg|jpeg|gif|svg|webp|ico)).*)"], 
+	// githubのイシューで拾ってきたマッチャー
+	//API,static,拡張子つきファイル、_nextを除外してすべてのルートにミドルウェアを使用
+  matcher: ["/((?!api|static|.*\\..*|_next).*)"], 
 };
