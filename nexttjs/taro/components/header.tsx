@@ -14,11 +14,11 @@ const Header = () => {
                 </Link>
 
                 <nav className='flex items-center space-x-4'>
-                    {/* <Button className='flex items-center space-x-4' asChild>
+                    <Button className='flex items-center space-x-4' asChild>
                         <Link href='/mypage' className='flex items-center space-x-2'>
                             <User className='h-4 w-4' />
                         </Link>
-                    </Button> */}
+                    </Button>
                 </nav>
             </div>
         </header>
