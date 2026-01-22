@@ -6,11 +6,10 @@ const UserCard = ({ user }: { user: User }) => {
     return (
         <Card className='max-w-sm mx-auto'>
             <CardContent className='flex flex-col items-center gap-4 p-6'>
-                <Avatar className='w-16 h-16'>
+                <Avatar className='w-16 h-16 border'>
                     <AvatarImage
-                        src='https://github.com/shadcn.png'
-                        alt='@shadcn'
-                        className='grayscale'
+                        src={`https://api.dicebear.com/7.x/micah/svg?seed=${user.id}`}
+                        alt={user.name ?? user.email ?? 'user'}
                     />
                 </Avatar>
                 <div className='text-center'>
