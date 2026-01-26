@@ -1,9 +1,12 @@
-import { integer, pgEnum, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { nanoid } from 'nanoid';
 import { relations } from 'drizzle-orm';
 
-export const petTypeEnum = pgEnum('pet_type', ['dog', 'cat']);
+export const petType = ['dog', 'cat'] as const;
+
+//ペットの種類を定義するenum
+export const petTypeEnum = pgEnum('pet_type', petType);
 
 export const pets = pgTable('pets', {
     id: text('id')
