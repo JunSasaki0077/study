@@ -1,5 +1,5 @@
-// actionは必ずuse severをつける
-'use sever';
+// actionは必ずuse serverをつける
+'use server';
 
 import { db } from '@/db';
 import { pets } from '@/db/schemas/pet';
