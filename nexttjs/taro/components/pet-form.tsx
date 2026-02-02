@@ -2,11 +2,11 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { PetFormData } from '@/type/pets';
+import { Pet, PetFormData } from '@/type/pets';
 import { petFormSchema } from '@/zod/pet';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { createPet } from '@/actions/pet';
+import { createPet, updatePet } from '@/actions/pet';
 import { toast } from 'sonner';
 import {
     Form,
@@ -21,11 +21,11 @@ import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from './ui/button';
 
-const PetForm = () => {
+const PetForm = ({ defaultValue }: { defaultValue: Pet }) => {
     const router = useRouter();
     const form = useForm<PetFormData>({
         resolver: zodResolver(petFormSchema),
-        defaultValues: {
+        defaultValues: defaultValue ?? {
             name: '',
             type: 'dog',
             hp: 50,
@@ -34,11 +34,16 @@ const PetForm = () => {
 
     const onSubmit = async (data: PetFormData) => {
         try {
-            await createPet(data);
-            toast('ペットが作成されました！', {
+            if (defaultValue) {
+                await updatePet(defaultValue.id, data);
+            } else {
+                await createPet(data);
+                form.reset();
+            }
+            toast(`ペットが${defaultValue ? '更新' : '作成'}されました！`, {
                 description: `${data.name}を追加しました。`,
             });
-            form.reset();
+
             router.refresh();
         } catch (error) {
             toast('エラーが発生しました', {
@@ -115,7 +120,7 @@ const PetForm = () => {
                     )}
                 />
                 <Button type='submit' className='w-full' disabled={isSubmitting}>
-                    ペットを追加
+                    {defaultValue ? 'ペットを更新' : 'ペットを追加'}
                 </Button>
             </form>
         </Form>

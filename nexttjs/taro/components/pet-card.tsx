@@ -1,6 +1,8 @@
 import { Pet } from '@/type/pets';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardFooter } from './ui/card';
 import { PetType } from '@/type/pets';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 const PetCard = ({ pet }: { pet: Pet }) => {
     const maxHp = 100;
@@ -46,6 +48,11 @@ const PetCard = ({ pet }: { pet: Pet }) => {
                     </div>
                 </div>
             </CardContent>
+            <CardFooter>
+                <Button asChild>
+                    <Link href={`/pets/${pet.id}`}>編集</Link>
+                </Button>
+            </CardFooter>
         </Card>
     );
 };
