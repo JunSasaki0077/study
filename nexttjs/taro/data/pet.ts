@@ -3,10 +3,19 @@ import 'server-only';
 import { db } from '@/db';
 import { pets } from '@/db/schemas/pet';
 import { verifySession } from '@/lib/session';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, ilike } from 'drizzle-orm';
 
 export const getPets = async () => {
-    return db.query.pets.findMany();
+    return db.query.pets.findMany({
+        limit: 10,
+    });
+};
+
+export const searchPets = async (name: string) => {
+    return db.query.pets.findMany({
+        //likeは一部検索が一致した時にtrueを返す
+        where: ilike(pets.name, `%${name}%`),
+    });
 };
 
 export const getPet = async (id: string) => {

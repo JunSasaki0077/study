@@ -1,11 +1,19 @@
 import PetCard from '@/components/pet-card';
-import { getPets } from '@/data/pet';
+import PetSearchForm from '@/components/pet-search-form';
+import { getPets, searchPets } from '@/data/pet';
+import { createLoader, parseAsString } from 'nuqs/server';
 
-const PetsPage = async () => {
-    const pets = await getPets();
+const loadSearchParams = createLoader({
+    name: parseAsString.withDefault(''),
+});
+
+const PetsPage = async ({ searchParams }: PageProps<'/pets'>) => {
+    const { name } = await loadSearchParams(searchParams);
+    const pets = name ? await searchPets(name) : await getPets();
 
     return (
         <div className='container py-10'>
+            <PetSearchForm />
             <h1 className='text-2xl font-bold mb-6'>ペット一覧</h1>
             <div className='grid grid-cols-3 gap-4'>
                 {pets.map((pet) => (

@@ -48,6 +48,7 @@ const PetCard = ({ pet }: { pet: Pet }) => {
                     </div>
                 </div>
             </CardContent>
+
             <CardFooter>
                 <Button asChild>
                     <Link href={`/pets/${pet.id}`}>編集</Link>
